@@ -12,6 +12,7 @@ const bodyParser = require("body-parser");
 // User Routes
 router.post("/user/signup", userC.register);
 router.post("/user/login", userC.login);
+router.post("/admin/login", userC.loginAdmin);
 router.get("/user/me", auth, userC.getUser);
 router.put("/user/", auth, userC.updateProfile);
 router.delete("/user/", auth, userC.deleteProfile);
