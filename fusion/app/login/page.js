@@ -28,7 +28,7 @@ const Login = () => {
             const data = await response.json();
             console.log(data)
             if (response.ok) {
-                localStorage.setItem('user', JSON.stringify(data.user)); // Store user data in localStorage
+                localStorage.setItem('user', JSON.stringify(data)); // Store user data in localStorage
                 router.push('/'); // Redirect to home page on successful login
                 toast({
                     description: "Login Successful!!",

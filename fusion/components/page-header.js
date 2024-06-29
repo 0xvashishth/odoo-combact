@@ -17,14 +17,8 @@ export default function Header() {
         }
     }, [user]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('user');
-        setUser(null);
-        router.push('/login');
-    };
-
     return (
-        <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+        <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 mb-5">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <Image src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="FurnFlexi Logo" width={50} height={50}></Image>
@@ -37,7 +31,7 @@ export default function Header() {
                                 type="button"
                                 className="text-black"
                             >
-                                <img class="w-5 h-5 p-0 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 inline-block" src={"https://avatars.dicebear.com/api/gridy/{user.name}.svg"} alt="Bordered avatar" /> <span>{user.name}</span>
+                                <img class="w-5 h-5 p-0 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 inline-block" src={"https://avatars.dicebear.com/api/gridy/{user.name}.svg"} alt="Bordered avatar" /> <span>{user.user.name}</span>
                             </button>
                         </a>
                     ) : (
