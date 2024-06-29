@@ -6,7 +6,6 @@ import Image from "next/image";
 export default function Home() {
   return (
       <div>
-        <Header />
         <div
   className="hero min-h-screen"
   style={{
@@ -23,7 +22,7 @@ export default function Home() {
     </div>
   </div>
 </div>
-      </div>
+</div>
   );
 }
 

@@ -2,7 +2,7 @@ import "@/styles/globals.css"
 import { Inter as FontSans } from "next/font/google"
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
+// import { Toaster } from "@/components/ui/toaster"
 import Header from "../components/page-header"
 
 const fontSans = FontSans({

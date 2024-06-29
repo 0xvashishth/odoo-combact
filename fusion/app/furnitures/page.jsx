@@ -29,10 +29,9 @@ const FurnitureListing = () => {
 
     return (
         <div>
-            <div className="text-3xl">
+            <div className="text-3xl mt-32">
                 Furniture Listing...
             </div>
-            <Link className="btn" href="/">Back to Home</Link>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
             
             {isLoading ? (
