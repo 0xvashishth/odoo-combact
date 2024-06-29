@@ -9,6 +9,7 @@ const {
   userUpdateMailScript,
   userDeleteMailScript,
 } = require("../services/mail/mailScript");
+const mongoose = require("mongoose");
 
 exports.register = async (req, res) => {
   const { name, email, phone, password } = req.body;
@@ -85,13 +86,13 @@ exports.loginAdmin = async (req, res) => {
     if (!admin)
       return res
         .status(400)
-        .json({ msg: "Invalid credentials(Admin not found)" });
+        .json({ error: "Invalid credentials(Admin not found)" });
 
     const isMatch = password == admin.password;
     if (!isMatch)
       return res
         .status(400)
-        .json({ msg: "Invalid credentials(Wrong Password)" });
+        .json({ error: "Invalid credentials(Wrong Password)" });
 
     const token = await admin.generateAuthToken();
 

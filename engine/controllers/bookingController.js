@@ -1,4 +1,5 @@
 const Booking = require("../models/Booking");
+const mongoose = require("mongoose");
 
 exports.bookFurniture = async (req, res) => {
   const { furnitureId, rentalDate, returnDate } = req.body;
@@ -54,3 +55,29 @@ exports.bookFurniture = async (req, res) => {
   }
 };
 
+exports.getAllBookings = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const startIndex = (page - 1) * limit;
+
+    const bookings = await Booking.find()
+      .skip(startIndex)
+      .limit(parseInt(limit));
+    const totalCount = await Booking.countDocuments();
+
+    const pagination = {
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalCount / limit),
+      totalEntries: totalCount,
+    };
+
+    return res.status(200).json({
+      message: "Bookings fetched successfully!",
+      bookings,
+      pagination,
+    });
+  } catch (err) {
+      console.log(err.message)
+      return res.status(500).json({ error: "Something went wrong!" });
+  }
+};
