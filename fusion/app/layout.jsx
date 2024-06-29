@@ -11,14 +11,14 @@ const fontSans = FontSans({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning  data-theme="light">
       <body
         className={cn(
           "flex flex-col h-screen font-sans antialiased",
           fontSans.variable
         )}
         >
-        <main className="grow">{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   )
