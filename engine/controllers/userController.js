@@ -1,6 +1,13 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendEmailWithSendGrid } = require("../services/mail/mailService");
+const {
+  userLoginMailScript,
+  userRegistrationMailScript,
+  userUpdateMailScript,
+  userDeleteMailScript,
+} = require("../services/mail/mailScript");
 
 exports.register = async (req, res) => {
   const { name, email, phone, password } = req.body;
@@ -17,13 +24,17 @@ exports.register = async (req, res) => {
 
     const token = await user.generateAuthToken();
 
-    return res
-      .status(201)
-      .json({
-        message: "User created successfully!",
-        token,
-        user: user.getPublicProfile,
-      });
+    await sendEmailWithSendGrid(
+      "You are Successfully Registered",
+      [email],
+      userRegistrationMailScript(name)
+    );
+
+    return res.status(201).json({
+      message: "User created successfully!",
+      token,
+      user: user.getPublicProfile(),
+    });
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({ error: "Something went wrong!" });
@@ -48,13 +59,17 @@ exports.login = async (req, res) => {
 
     const token = await user.generateAuthToken();
 
-    return res
-      .status(200)
-      .json({
-        message: "User Logged in successfully!",
-        token,
-        user: user.getPublicProfile,
-      });
+    await sendEmailWithSendGrid(
+      "Login Attempt",
+      [email],
+      userLoginMailScript(user.name)
+    );
+
+    return res.status(200).json({
+      message: "User Logged in successfully!",
+      token,
+      user: user.getPublicProfile(),
+    });
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({ error: "Something went wrong!" });
@@ -82,13 +97,8 @@ exports.updateProfile = async (req, res, nxt) => {
   // starting the mongoose transaction
   session.startTransaction();
 
-  const allowedAttributes = [
-    "name",
-    "email",
-    "phone"
-  ];
+  const allowedAttributes = ["name", "email", "phone"];
   try {
-
     const filteredUser = allowedAttributes.reduce((acc, attribute) => {
       if (user.hasOwnProperty(attribute)) {
         acc[attribute] = user[attribute];
@@ -104,11 +114,14 @@ exports.updateProfile = async (req, res, nxt) => {
 
     await session.commitTransaction(); // Commit the transaction
     session.endSession();
-
+    await sendEmailWithSendGrid(
+      "User Profile Updation Attempt",
+      [user.email],
+      userUpdateMailScript(user.name)
+    );
     return res.status(200).json({
       message: "User Updated Successfully!",
     });
-
   } catch (err) {
     await session.abortTransaction(); // Rollback the transaction
     session.endSession();
@@ -123,17 +136,20 @@ exports.deleteProfile = async (req, res, nxt) => {
   session.startTransaction();
 
   try {
-
-    await User.findByIdAndDelete({ _id: req.userId }, { session });
-
+    var user = await User.findByIdAndDelete({ _id: req.userId }, { session });
 
     await session.commitTransaction(); // Commit the transaction
     session.endSession();
 
+    await sendEmailWithSendGrid(
+      "User Profile Deleted",
+      [user.email],
+      userDeleteMailScript(user.name)
+    );
+
     return res.status(200).json({
       message: "User Deleted Successfully!",
     });
-
   } catch (err) {
     await session.abortTransaction(); // Rollback the transaction
     session.endSession();
