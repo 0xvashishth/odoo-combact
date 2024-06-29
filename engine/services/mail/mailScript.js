@@ -57,10 +57,10 @@ function userRegistrationMailScript(name) {
     </style>
 </head>
 <body>
-    <div class="container">
+    <div className="container">
         <h1>Congratulations! You are registered on our platform</h1>
         <p>Hey ${name},</p>
-        <p class="footer">If you have any questions or need assistance, feel free to contact us.</p>
+        <p className="footer">If you have any questions or need assistance, feel free to contact us.</p>
     </div>
 </body>
 </html>`;
@@ -125,9 +125,9 @@ function userLoginMailScript(name) {
     </style>
 </head>
 <body>
-    <div class="container">
+    <div className="container">
         <p>Hey ${name}, Someone has recently logged in into your account.</p>
-        <p class="footer">If this is not you, or If you have any questions or need assistance, feel free to contact us.</p>
+        <p className="footer">If this is not you, or If you have any questions or need assistance, feel free to contact us.</p>
     </div>
 </body>
 </html>`;
@@ -192,9 +192,9 @@ function userUpdateMailScript(name) {
     </style>
 </head>
 <body>
-    <div class="container">
+    <div className="container">
         <p>Hey ${name}, Your profile has been updated.</p>
-        <p class="footer">If this is not you, or If you have any questions or need assistance, feel free to contact us.</p>
+        <p className="footer">If this is not you, or If you have any questions or need assistance, feel free to contact us.</p>
     </div>
 </body>
 </html>`;
@@ -259,7 +259,7 @@ function userDeleteMailScript(name) {
     </style>
 </head>
 <body>
-    <div class="container">
+    <div className="container">
         <p>Hey ${name}, Your profile has been deleted.</p>
     </div>
 </body>
