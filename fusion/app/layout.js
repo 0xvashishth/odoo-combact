@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
       >
-        <Home />
+        {children}
       </body>
     </html>
   )
