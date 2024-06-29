@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 var cors = require("cors");
 const bodyParser = require("body-parser");
+const commonR = require("./routes");
 
 var whitelist = ["https://localhost:3000/", "http://localhost:3000" , "http://localhost:3000/"];
 var corsOptions = {
@@ -29,9 +30,9 @@ connectDB();
 app.use(express.json({ extended: false }));
 app.use(express.json());
 
-// link the router
-// app.use(require("./controller/login"));
 
+// routers
+app.use("/api/v1", commonR);
 
 // Middleware
 const middleware = (req, res, next) => {
