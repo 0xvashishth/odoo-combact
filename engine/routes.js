@@ -7,6 +7,7 @@ const furnitureC = require("./controllers/furnitureController");
 const bookingC = require("./controllers/bookingController");
 const PaymentController = require("./controllers/paymentController");
 const webhookController = require("./controllers/webhookController");
+const bodyParser = require("body-parser");
 
 // User Routes
 router.post("/user/signup", userC.register);
