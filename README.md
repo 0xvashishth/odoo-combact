@@ -30,3 +30,17 @@ The primary objective of the Furniture Renting Project is to provide a seamless,
     - Users will receive payment confirmation and receipts after completing transactions.
 
 ### Snapshots of the Application:
+
+1. Home Page of Application
+![image](https://github.com/0xvashishth/odoo-combact/assets/84856389/d6f4c941-99b4-4f8e-be90-10dcad809aa7)
+
+2. User Login & Registration
+![image](https://github.com/0xvashishth/odoo-combact/assets/84856389/419d1c0e-a130-4254-be34-15dff9ed4fc7)
+
+3. User Profile
+![image](https://github.com/0xvashishth/odoo-combact/assets/84856389/326cfddb-edf2-459a-b6d1-0f68ae42e80a)
+
+4. Furniture Lists
+![image](https://github.com/0xvashishth/odoo-combact/assets/84856389/e2e9ec51-145c-4e78-bf19-99d61730f954)
+
+---
