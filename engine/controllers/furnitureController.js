@@ -1,5 +1,6 @@
 const Furniture = require("../models/Furniture");
 const Booking = require("../models/Booking");
+const mongoose = require("mongoose");
 
 exports.getAllFurniture = async (req, res) => {
   try {
@@ -43,7 +44,7 @@ exports.getFurniture = async (req, res) => {
 };
 
 exports.addFurniture = async (req, res) => {
-    const { name, description, rentalPrice, availability, mainImageUrl, imageUrls } = req.body.furniture;
+    const { name, description, rentalPrice, imageUrls } = req.body.furniture;
     const session = await mongoose.startSession();
     // starting the mongoose transaction
     session.startTransaction();
@@ -52,11 +53,10 @@ exports.addFurniture = async (req, res) => {
             name,
             description,
             rentalPrice,
-            availability,
             createdBy: req.adminId,
-            mainImageUrl,
             imageUrls,
             creationDate: Date.now(),
+            updatedBy: req.adminId,
         });
         const furniture = await newFurniture.save({ session });
         await session.commitTransaction(); // Commit the transaction

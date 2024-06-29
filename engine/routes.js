@@ -26,6 +26,7 @@ router.get("/furniture", furnitureC.getAllFurniture);
 
 // Booking Routes
 router.post("/booking", auth, bookingC.bookFurniture);
+router.get("/booking", adminAuth, bookingC.getAllBookings);
 
 // Payment Routes
 router.post("/create-payment-intent", PaymentController.createPaymentIntent);

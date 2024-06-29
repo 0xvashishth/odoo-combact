@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Inter as FontSans } from "next/font/google"
-
+import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils"
 
 
@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
         >
+          <Toaster />
         <main>{children}</main>
       </body>
     </html>
