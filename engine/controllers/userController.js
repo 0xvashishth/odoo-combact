@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { sendEmailWithSendGrid } = require("../services/mail/mailService");
@@ -69,6 +70,35 @@ exports.login = async (req, res) => {
       message: "User Logged in successfully!",
       token,
       user: user.getPublicProfile(),
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ error: "Something went wrong!" });
+  }
+};
+
+exports.loginAdmin = async (req, res) => {
+  const { email, password } = req.body.admin;
+
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin)
+      return res
+        .status(400)
+        .json({ msg: "Invalid credentials(Admin not found)" });
+
+    const isMatch = password == admin.password;
+    if (!isMatch)
+      return res
+        .status(400)
+        .json({ msg: "Invalid credentials(Wrong Password)" });
+
+    const token = await admin.generateAuthToken();
+
+    return res.status(200).json({
+      message: "Addmin Logged in successfully!",
+      token,
+      admin: admin.name
     });
   } catch (err) {
     console.log(err.message);
