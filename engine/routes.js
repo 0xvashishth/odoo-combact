@@ -5,6 +5,8 @@ const router = express.Router();
 const userC = require("./controllers/userController");
 const furnitureC = require("./controllers/furnitureController");
 const bookingC = require("./controllers/bookingController");
+const PaymentController = require("./controllers/paymentController");
+const webhookController = require("./controllers/webhookController");
 
 // User Routes
 router.post("/user/signup", userC.register);
@@ -12,7 +14,6 @@ router.post("/user/login", userC.login);
 router.get("/user/me", auth, userC.getUser);
 router.put("/user/", auth, userC.updateProfile);
 router.delete("/user/", auth, userC.deleteProfile);
-
 
 // Furniture Routes
 router.post("/furniture/", adminAuth, furnitureC.addFurniture);
@@ -23,6 +24,14 @@ router.get("/furniture", furnitureC.getAllFurniture);
 
 // Booking Routes
 router.post("/booking", auth, bookingC.bookFurniture);
+
+// Payment Routes
+router.post("/create-payment-intent", PaymentController.createPaymentIntent);
+router.post(
+  "/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  webhookController.handleWebhook
+);
 
 // User Verification
 // router.get("/verifyemail", userC.emailVerification);
@@ -41,6 +50,5 @@ router.post("/booking", auth, bookingC.bookFurniture);
 // // not implemented live for publishing the announcement, need to do manually from local system
 // router.post("/createAnnoucement", userC.addAnnouncementByAdmin);
 // router.put("/user:id", userC.updateUser);
-
 
 module.exports = router;
