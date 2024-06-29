@@ -1,7 +1,7 @@
 const Furniture = require("../models/Furniture");
 const Booking = require("../models/Booking");
 
-exports.getFurniture = async (req, res) => {
+exports.getAllFurniture = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const startIndex = (page - 1) * limit;
@@ -28,8 +28,22 @@ exports.getFurniture = async (req, res) => {
   }
 };
 
+exports.getFurniture = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const furniture = await Furniture.findById(id);
+        if (!furniture) {
+            return res.status(404).json({ error: "Furniture not found" });
+        }
+        return res.status(200).json({ message: "Furniture retrived successfully!", furniture });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: "Something went wrong!" });
+    }
+};
+
 exports.addFurniture = async (req, res) => {
-    const { name, description, rentalPrice, availability, createdBy, mainImageUrl, imageUrls } = req.body.furniture;
+    const { name, description, rentalPrice, availability, mainImageUrl, imageUrls } = req.body.furniture;
     const session = await mongoose.startSession();
     // starting the mongoose transaction
     session.startTransaction();
@@ -39,12 +53,12 @@ exports.addFurniture = async (req, res) => {
             description,
             rentalPrice,
             availability,
-            createdBy,
+            createdBy: req.adminId,
             mainImageUrl,
             imageUrls,
             creationDate: Date.now(),
         });
-        const furniture = await newFurniture.save();
+        const furniture = await newFurniture.save({ session });
         await session.commitTransaction(); // Commit the transaction
         session.endSession();
         return res.status(201).json({ message: "Furniture created successfully!", furniture });
@@ -59,10 +73,14 @@ exports.addFurniture = async (req, res) => {
 exports.updateFurniture = async (req, res) => {
     const { id } = req.params;
     const { name, description, rentalPrice, availability, mainImageUrl, imageUrls } = req.body;
-
+    const session = await mongoose.startSession();
+    // starting the mongoose transaction
+    session.startTransaction();
     try {
         const furniture = await Furniture.findById(id);
         if (!furniture) {
+            await session.abortTransaction(); // Rollback the transaction
+            session.endSession();
             return res.status(404).json({ error: "Furniture not found!" });
         }
 
@@ -72,10 +90,16 @@ exports.updateFurniture = async (req, res) => {
         furniture.availability = availability;
         furniture.mainImageUrl = mainImageUrl;
         furniture.imageUrls = imageUrls;
+        furniture.updatedBy = req.adminId;
+        furniture.updationDate = Date.now;
 
-        const updatedFurniture = await furniture.save();
+        const updatedFurniture = await furniture.save({session});
+        await session.commitTransaction(); // Commit the transaction
+        session.endSession();
         return res.status(201).json({ message: "Furniture updated successfully!", furniture: updatedFurniture });
     } catch (err) {
+        await session.abortTransaction(); // Rollback the transaction
+        session.endSession();
         console.log(err.message)
         return res.status(500).json({ error: "Something went wrong!" });
     }
@@ -83,23 +107,31 @@ exports.updateFurniture = async (req, res) => {
 
 exports.deleteFurniture = async (req, res) => {
   const { id } = req.params;
-
+  const session = await mongoose.startSession();
+  // starting the mongoose transaction
+  session.startTransaction();
   try {
       const furniture = await Furniture.findById(id);
       if (!furniture) {
+          await session.abortTransaction(); // Rollback the transaction
+          session.endSession();
           return res.status(404).json({ error: "Furniture not found!" });
       }
 
       const bookings = await Booking.find({ furniture: id });
       if (bookings.length > 0) {
           for (const booking of bookings) {
-              await booking.remove();
+              await Booking.findByIdAndDelete(booking._id, { session });
           }
       }
 
-      await furniture.remove();
+      await furniture.remove({ session });
+      await session.commitTransaction(); // Commit the transaction
+      session.endSession();
       return res.status(200).json({ message: "Furniture and associated bookings deleted successfully!" });
   } catch (err) {
+      await session.abortTransaction(); // Rollback the transaction
+      session.endSession();
       console.log(err.message)
       return res.status(500).json({ error: "Something went wrong!" });
   }

@@ -124,25 +124,7 @@ exports.deleteProfile = async (req, res, nxt) => {
 
   try {
 
-    await ChatSession.deleteMany({
-      chatID: {
-        $in: (await Chat.find({ userID: req.userId })).map((chat) => chat._id),
-      },
-    });
-
-    await Chat.deleteMany({ agent: req.userId });
-
-    await Url.deleteMany({ userID: req.userId });
-
-    await FormDetails.deleteMany({
-      FormID: {
-        $in: (await Form.find({ userID: req.userId })).map((form) => form._id),
-      },
-    });
-
-    await Form.deleteMany({ userID: req.userId });
-
-    await User.findByIdAndDelete({ _id: req.userId });
+    await User.findByIdAndDelete({ _id: req.userId }, { session });
 
 
     await session.commitTransaction(); // Commit the transaction

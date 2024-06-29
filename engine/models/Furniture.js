@@ -9,6 +9,8 @@ const FurnitureSchema = new mongoose.Schema({
     mainImageUrl: { type: String, required: true },
     imageUrls: { type: [String] },
     creationDate: { type: Date, default: Date.now, required: true },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true },
+    updationDate: { type: Date }
 });
 
 module.exports = mongoose.model('Furniture', FurnitureSchema);

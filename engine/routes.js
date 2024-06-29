@@ -3,13 +3,26 @@ const adminAuth = require("./middlewares/adminAuth");
 const express = require("express");
 const router = express.Router();
 const userC = require("./controllers/userController");
+const furnitureC = require("./controllers/furnitureController");
+const bookingC = require("./controllers/bookingController");
 
-router.post("/signup", userC.register);
-router.post("/login", userC.login);
-router.get("/me", auth, userC.getUser);
-router.put("/", auth, userC.updateProfile);
-router.delete("/", auth, userC.deleteProfile);
+// User Routes
+router.post("/user/signup", userC.register);
+router.post("/user/login", userC.login);
+router.get("/user/me", auth, userC.getUser);
+router.put("/user/", auth, userC.updateProfile);
+router.delete("/user/", auth, userC.deleteProfile);
 
+
+// Furniture Routes
+router.post("/furniture/", adminAuth, furnitureC.addFurniture);
+router.put("/furniture/", adminAuth, furnitureC.updateFurniture);
+router.delete("/furniture/", adminAuth, furnitureC.deleteFurniture);
+router.get("/furniture/:id", furnitureC.getFurniture);
+router.get("/furniture", furnitureC.getAllFurniture);
+
+// Booking Routes
+router.post("/booking", auth, bookingC.bookFurniture);
 
 // User Verification
 // router.get("/verifyemail", userC.emailVerification);
