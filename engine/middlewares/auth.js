@@ -25,8 +25,8 @@ const auth = async (req, res, next) => {
         req.userId = rootUser._id;
         next();
     } catch (err) {
-        console.log(err);
-        return res.status(401).json({ error: "Something went wrong!" });
+        console.log(err.message);
+        return res.status(500).json({ error: "Something went wrong!" });
     }
 }
 
