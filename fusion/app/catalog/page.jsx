@@ -1,7 +1,22 @@
 import { FurnitureCard } from "@/components/furniture-card";
 import Link from "next/link";
 
-export default function Catalog() {
+async function getFurnitures() {
+    const res = await fetch('http://localhost:8082/furniture');
+
+    if (!res.ok) {
+        console.error(res.status);
+        throw new Error('Error fetching furnitures.');
+    }
+
+    return res.json();
+}
+
+export default async function Catalog() {
+    const furnitures = await getFurnitures();
+
+    console.log(furnitures);
+
     return (
         <div className="container my-5">
             <h1 className="font-semibold text-2xl mb-6">Catalog</h1>
